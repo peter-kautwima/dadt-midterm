@@ -1,0 +1,52 @@
+# SQL Commands to build Database
+
+CREATE DATABASE cars;
+
+USE cars;
+
+CREATE TABLE car (
+id VARCHAR(255) NOT NULL,
+make VARCHAR(255) NOT NULL,
+model VARCHAR(255) NOT NULL,
+year INT NOT NULL,
+horsepower INT NOT NULL,
+torque INT NOT NULL,
+engine_make VARCHAR(255) NOT NULL,
+engine_capacity FLOAT NOT NULL,
+engine_cylinders INT NOT NULL,
+engine_modifier VARCHAR(255),
+PRIMARY KEY (id)
+);
+
+CREATE TABLE driveline (
+id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+car_id VARCHAR(255) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (car_id) REFERENCES car (id)
+);
+
+CREATE TABLE transmission (
+id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+car_id VARCHAR(255) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (car_id) REFERENCES car (id)
+);
+
+CREATE TABLE fuel_type (
+id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+car_id VARCHAR(255) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (car_id) REFERENCES car (id)
+);
+
+CREATE TABLE mileage (
+id INT NOT NULL AUTO_INCREMENT,
+city_mpg INT NOT NULL,
+highway_mpg INT NOT NULL,
+car_id VARCHAR(255) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (car_id) REFERENCES car (id)
+);

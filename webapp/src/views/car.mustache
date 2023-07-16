@@ -1,0 +1,45 @@
+{{! All code in this file is my own. }}
+
+<!DOCTYPE html>
+<html lang="en">
+	{{> ./partials/head }}
+	<body>
+		<div class="container">
+			<header>
+				{{> ./partials/navbar }}
+			</header>
+			<main>
+				<table>
+					<thead>
+						<th>id</th>
+						<th>make</th>
+						<th>model</th>
+						<th>year</th>
+						<th>horsepower</th>
+						<th>torque</th>
+						<th>engine_make</th>
+						<th>engine_capacity</th>
+						<th>engine_cylinders</th>
+						<th>engine_modifier</th>
+					</thead>
+					<tbody>
+						{{#cars}}
+						<tr>
+							<td>{{ id }}</td>
+							<td>{{ make }}</td>
+							<td>{{ model }}</td>
+							<td>{{ year }}</td>
+							<td>{{ horsepower }}</td>
+							<td>{{ torque }}</td>
+							<td>{{ engine_make }}</td>
+							<td>{{ engine_capacity }}</td>
+							<td>{{ engine_cylinders }}</td>
+							<td>{{ engine_modifier }}</td>
+						</tr>
+						{{/cars}}
+					</tbody>
+				</table>
+			</main>
+		</div>
+	</body>
+</html>

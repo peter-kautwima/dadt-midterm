@@ -1,0 +1,33 @@
+{{! All code in this file is my own. }}
+
+<!DOCTYPE html>
+<html lang="en">
+	{{> ./partials/head }}
+	<body>
+		<div class="container">
+			<header>
+				{{> ./partials/navbar }}
+			</header>
+			<main>
+				<table>
+					<thead>
+						<th>id</th>
+						<th>city_mpg</th>
+						<th>highway_mpg</th>
+						<th>car_id</th>
+					</thead>
+					<tbody>
+						{{#mileages}}
+						<tr>
+							<td>{{ id }}</td>
+							<td>{{ city_mpg }}</td>
+							<td>{{ highway_mpg }}</td>
+							<td>{{ car_id }}</td>
+						</tr>
+						{{/mileages}}
+					</tbody>
+				</table>
+			</main>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+	{{> ./partials/head }}
+	<body>
+		<div class="container">
+			<header>
+				{{> ./partials/navbar }}
+			</header>
+			<main>
+				<p>
+					This is a web app for my exploration of the cars.csv dataset from
+					<a
+						href="https://corgis-edu.github.io/corgis/csv/cars/"
+						target="_blank"
+						>https://corgis-edu.github.io/corgis/csv/cars/</a
+					>. Visit the links below to see available queries across all tables.
+				</p>
+
+				<div class="links">
+					<a href="/app/car">Car</a><a href="/app/driveline">Driveline</a
+					><a href="/app/fuel-type">Fuel Type</a
+					><a href="/app/mileage">Mileage</a
+					><a href="/app/transmission">Transmission</a>
+				</div>
+
+				<section id="questions">
+					<h2>Some questions that were asked of this dataset</h2>
+
+					<div class="question">
+						<h3>
+							1. Is there a significant difference in the mileage cars achieve
+							in the city vs on the highway?
+						</h3>
+
+						<h4>SQL Command</h4>
+						<pre>
+
+						<code class="sql">
+SELECT
+  AVG(city_mpg) AS average_city_mpg,
+  AVG(highway_mpg) AS average_highway_mpg,
+  CASE
+    WHEN AVG(city_mpg) > AVG(highway_mpg) THEN 'City mileage is higher'
+    WHEN AVG(city_mpg) < AVG(highway_mpg) THEN 'Highway mileage is higher'
+    ELSE 'City and highway mileage are equal'
+  END AS mileage_comparison
+FROM
+  Mileage;
+</code>
+</pre>
+
+						<h4>Results</h4>
+
+						<table>
+							<thead>
+								<th>average_city_mpg</th>
+								<th>average_highway_mpg</th>
+								<th>mileage_comparison</th>
+							</thead>
+
+							<tbody>
+								<tr>
+									<td>{{ q1.average_city_mpg }}</td>
+									<td>{{ q1.average_highway_mpg }}</td>
+									<td>{{ q1.mileage_comparison }}</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<div id="q1-chart"></div>
+						<script>
+							const q1Data = {{{ q1Data }}};
+							const q1Layout = {{{ q1Layout }}};
+							Plotly.newPlot('q1-chart', q1Data, q1Layout, {  displayModeBar: false});
+						</script>
+					</div>
+					<div class="question">
+						<h3>2. Do automatic cars have better mileage than manual cars?</h3>
+
+						<h4>SQL Command</h4>
+						<pre>
+	
+						<code class="sql">
+SELECT
+  AVG(m.city_mpg) AS average_city_mpg,
+  AVG(m.highway_mpg) AS average_highway_mpg,
+  t.name AS transmission_type
+FROM
+  Mileage m
+JOIN
+  Car c ON m.car_id = c.id
+JOIN
+  Transmission t ON t.car_id = c.id
+GROUP BY
+  t.name;					  
+</code>
+</pre>
+
+						<h4>Results</h4>
+
+						<table>
+							<thead>
+								<th>average_city_mpg</th>
+								<th>average_highway_mpg</th>
+								<th>transmission_type</th>
+							</thead>
+							<tbody>
+								{{#q2}}
+								<tr>
+									<td>{{ average_city_mpg }}</td>
+									<td>{{ average_highway_mpg }}</td>
+									<td>{{ transmission_type }}</td>
+								</tr>
+								{{/q2}}
+							</tbody>
+						</table>
+
+						<div id="q2-chart"></div>
+						<script>
+							const q2Data = {{{ q2Data }}};
+							const q2Layout = {{{ q2Layout }}};
+							Plotly.newPlot('q2-chart', q2Data, q2Layout, {  displayModeBar: false});
+						</script>
+					</div>
+					<div class="question">
+						<h3>3. Does the type of fuel a car uses influence its mileage?</h3>
+
+						<h4>SQL Command</h4>
+						<pre>
+	
+						<code class="sql">
+SELECT
+  AVG(m.city_mpg) AS average_city_mpg,
+  AVG(m.highway_mpg) AS average_highway_mpg,
+  f.name AS fuel_type
+FROM
+  Mileage m
+JOIN
+  Car c ON m.car_id = c.id
+JOIN
+  Fuel_Type f ON f.car_id = c.id
+GROUP BY
+  f.name;
+</code>
+</pre>
+
+						<h4>Results</h4>
+
+						<table>
+							<thead>
+								<th>average_city_mpg</th>
+								<th>average_highway_mpg</th>
+								<th>fuel_type</th>
+							</thead>
+							<tbody>
+								{{#q3}}
+								<tr>
+									<td>{{ average_city_mpg }}</td>
+									<td>{{ average_highway_mpg }}</td>
+									<td>{{ fuel_type }}</td>
+								</tr>
+								{{/q3}}
+							</tbody>
+						</table>
+
+						<div id="q3-chart"></div>
+						<script>
+							const q3Data = {{{ q3Data }}};
+							const q3Layout = {{{ q3Layout }}};
+							Plotly.newPlot('q3-chart', q3Data, q3Layout, {  displayModeBar: false});
+						</script>
+					</div>
+					<div class="question">
+						<h3>
+							4. What is the effect of engine modifiers like turbos on mileage,
+							if any?
+						</h3>
+
+						<h4>SQL Command</h4>
+						<pre>
+	
+						<code class="sql">
+SELECT
+  AVG(m.city_mpg) AS average_city_mpg,
+  AVG(m.highway_mpg) AS average_highway_mpg,
+  c.engine_modifier
+FROM
+  Mileage m
+JOIN
+  Car c ON m.car_id = c.id
+WHERE
+  c.engine_modifier IN ('None', 'Turbo', 'FFV', 'S-charged', 'Hybrid', 'CNG', 'S-Charged', 'TURBO', 'PZEV')
+GROUP BY
+  c.engine_modifier;
+</code>
+</pre>
+
+						<h4>Results</h4>
+
+						<table>
+							<thead>
+								<th>average_city_mpg</th>
+								<th>average_highway_mpg</th>
+								<th>engine_modifier</th>
+							</thead>
+							<tbody>
+								{{#q4}}
+								<tr>
+									<td>{{ average_city_mpg }}</td>
+									<td>{{ average_highway_mpg }}</td>
+									<td>{{ engine_modifier }}</td>
+								</tr>
+							</tbody>
+							{{/q4}}
+						</table>
+
+						<div id="q4-chart"></div>
+						<script>
+							const q4Data = {{{ q4Data }}};
+							const q4Layout = {{{ q4Layout }}};
+							Plotly.newPlot('q4-chart', q4Data, q4Layout, {  displayModeBar: false});
+						</script>
+					</div>
+					<div class="question">
+						<h3>
+							5. Do certain makes of cars give significantly better mileage than
+							others?
+						</h3>
+
+						<h4>SQL Command</h4>
+						<pre>
+	
+						<code class="sql">
+SELECT
+  c.make,
+  AVG(m.city_mpg) AS average_city_mpg,
+  AVG(m.highway_mpg) AS average_highway_mpg
+FROM
+  Car c
+JOIN
+  Mileage m ON c.id = m.car_id
+GROUP BY
+  c.make
+ORDER BY
+  average_city_mpg DESC, average_highway_mpg DESC;
+</code>
+</pre>
+
+						<h4>Results</h4>
+
+						<table>
+							<thead>
+								<th>make</th>
+								<th>average_city_mpg</th>
+								<th>average_highway_mpg</th>
+							</thead>
+
+							<tbody>
+								{{#q5}}
+								<tr>
+									<td>{{ make }}</td>
+									<td>{{ average_city_mpg }}</td>
+									<td>{{ average_highway_mpg }}</td>
+								</tr>
+								{{/q5}}
+							</tbody>
+						</table>
+
+						<div id="q5-chart"></div>
+						<script>
+							const q5Data = {{{ q5Data }}};
+							const q5Layout = {{{ q5Layout }}};
+							Plotly.newPlot('q5-chart', q5Data, q5Layout, {  displayModeBar: false});
+						</script>
+					</div>
+				</section>
+			</main>
+		</div>
+	</body>
+</html>

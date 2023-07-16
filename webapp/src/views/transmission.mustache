@@ -1,0 +1,31 @@
+{{! All code in this file is my own. }}
+
+<!DOCTYPE html>
+<html lang="en">
+	{{> ./partials/head }}
+	<body>
+		<div class="container">
+			<header>
+				{{> ./partials/navbar }}
+			</header>
+			<main>
+				<table>
+					<thead>
+						<th>id</th>
+						<th>name</th>
+						<th>car_id</th>
+					</thead>
+					<tbody>
+						{{#transmissions}}
+						<tr>
+							<td>{{ id }}</td>
+							<td>{{ name }}</td>
+							<td>{{ car_id }}</td>
+						</tr>
+						{{/transmissions}}
+					</tbody>
+				</table>
+			</main>
+		</div>
+	</body>
+</html>
